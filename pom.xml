@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.raven</groupId>
-	<artifactId>stock-trader-app</artifactId>
+	<artifactId>project-raven-app</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>stock-trader-app</name>
-	<description>Stock trader web application using Spring Boot.</description>
+	<name>project-raven-app</name>
+	<description>Project Raven is a Spring Boot base project.</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
