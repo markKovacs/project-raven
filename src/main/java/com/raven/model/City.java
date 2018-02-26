@@ -1,4 +1,4 @@
-package com.stocktraderapp.model;
+package com.raven.model;
 
 public enum City {
     BDP("Budapest"),

@@ -1,4 +1,4 @@
-package com.stocktraderapp.model;
+package com.raven.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,7 +39,7 @@ public class User {
     @Column(length = 80)
     private String userHash;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     @OrderBy("postedAt desc NULLS LAST")
     private List<Post> postList = new ArrayList<>();
 
@@ -58,6 +58,11 @@ public class User {
             return givenName + " " + middleName + " " + familyName;
         }
         return givenName + " " + familyName;
+    }
+
+    public void addPost(Post post) {
+        this.postList.add(post);
+        post.setUser(this);
     }
 
 }

@@ -16,3 +16,11 @@ body {
 .theme-showcase .navbar .container {
     width: auto;
 }
+
+.user-row-clickable {
+    cursor: pointer;
+}
+
+.user-row-clickable:hover {
+    background-color: #EDEDEE !important;
+}

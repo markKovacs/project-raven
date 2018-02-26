@@ -2,8 +2,14 @@ var app = app || {};
 
 app.logic = {
 
-    testFunction: function () {
-        console.log("testFunction called from logic.js")
+    addUserRowEventListener: function() {
+        $(".user-row-clickable").click(function() {
+            window.location = $(this).data("href");
+        });
+    },
+
+    setActiveMenu: function() {
+        $('a[href="' + window.location.pathname + '"]').parents('li').addClass('active');
     }
 
 };

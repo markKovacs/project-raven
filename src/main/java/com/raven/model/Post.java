@@ -1,4 +1,4 @@
-package com.stocktraderapp.model;
+package com.raven.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,4 +27,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    public Post(String content) {
+        this.content = content;
+        this.postedAt = new Date();
+    }
+
 }

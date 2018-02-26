@@ -1,4 +1,4 @@
-package com.stocktraderapp.config;
+package com.raven.config;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;

@@ -1,13 +1,13 @@
-package com.stocktraderapp;
+package com.raven;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StockTraderSpringBootApp {
+public class ProjectRavenSpringBootApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(StockTraderSpringBootApp.class, args);
+        SpringApplication.run(ProjectRavenSpringBootApp.class, args);
     }
 
 }

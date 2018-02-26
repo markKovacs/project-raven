@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+
+<head>
+    <title>User Details Page</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="jumbotron">
+        <h1>User Details Page</h1>
+        <p>Showing details of a specific user.</p>
+    </div>
+
+    <!-- User Details-->
+    <div class="page-header">
+        <h2>User Info</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>ID: <span th:text="${user.id}">123</span></p>
+            <p>Email: <span th:text="${user.email}">johndoe@gmail.com</span></p>
+            <p>Full Name: <span th:text="${user.name}">John Doe</span></p>
+            <p>City: <span th:text="${user.city}">New York</span></p>
+            <p>Registered: <span th:text="${#dates.format(user.registeredAt, 'dd-MM-yyyy HH:mm')}">28-11-2018 12:45</span></p>
+        </div>
+    </div>
+
+    <!-- User Posts -->
+    <div class="page-header">
+        <h2><span th:text="${user.name}">User</span>'s Posts</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p th:if="${#lists.isEmpty(user.posts)}">
+                This user does not have any posts.
+            </p>
+            <table class="table table-striped" th:unless="${#lists.isEmpty(user.posts)}">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Content</th>
+                    <th>Posted</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="post : ${user.posts}">
+                    <td th:text="${post.id}">123</td>
+                    <td th:text="${post.content}">A great post content.</td>
+                    <td th:text="${#dates.format(post.postedAt, 'dd-MM-yyyy HH:mm')}">28-11-2018 12:45</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
