@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" th:href="@{~/img/raven.png}"/>
 
     <title layout:title-pattern="$CONTENT_TITLE - ProjectRaven">ProjectRaven</title>
 
@@ -15,9 +21,9 @@
 
     <!-- Bootstrap JS, CSS and theme-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
@@ -26,54 +32,71 @@
     <link rel="stylesheet" type="text/css" th:href="@{~/css/style.css}"/>
 
     <!-- Custom JS -->
-    <script th:src="@{~/js/data_handler.js}" type="application/javascript" defer></script>
-    <script th:src="@{~/js/logic.js}" type="application/javascript" defer></script>
-    <script th:src="@{~/js/main.js}" type="application/javascript" defer></script>
-
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" th:href="@{~/img/raven.png}"/>
+    <script th:src="@{~/js/data_handler.js}" type="application/javascript" defer="defer"></script>
+    <script th:src="@{~/js/logic.js}" type="application/javascript" defer="defer"></script>
+    <script th:src="@{~/js/main.js}" type="application/javascript" defer="defer"></script>
 
 </head>
 
 <body>
 
-<!-- Fixed navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" th:href="@{/}">ProjectRaven</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" th:href="@{/}">ProjectRaven</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/}">Home</a></li>
+                    <li><a th:href="@{/users}">Users</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Details <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/user/1}">User One</a></li>
+                            <li><a th:href="@{/user/2}">User Two</a></li>
+                            <li><a th:href="@{/user/3}">User Three</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li sec:authorize="isAnonymous()">
+                        <a th:href="@{/registration}">Registration</a>
+                    </li>
+                    <li sec:authorize="isAnonymous()">
+                        <a th:href="@{/login}">Login</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a sec:authentication="name" th:href="@{/profile}">Anonymous</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <form id="frmlogout" th:action="@{/logout}" method="post" class="form-inline" hidden="hidden"></form>
+                        <a href="javascript:{}" onclick="document.getElementById('frmlogout').submit(); return false;">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/users}">Users</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Details <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a th:href="@{/user/1}">User One</a></li>
-                        <li><a th:href="@{/user/2}">User Two</a></li>
-                        <li><a th:href="@{/user/3}">User Three</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div><!--/.nav-collapse -->
+    </nav>
+
+    <div class="container theme-showcase" role="main">
+
+        <!-- Content through layout dialect -->
+        <div layout:fragment="content"></div>
+
     </div>
-</nav>
 
-<div class="container theme-showcase" role="main">
-
-    <!-- Content through layout dialect -->
-    <div layout:fragment="content"></div>
-
-</div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted text-center footer-text">© 2018 ProjectRaven - Spring Boot base project.</p>
+        </div>
+    </footer>
 
 </body>
 

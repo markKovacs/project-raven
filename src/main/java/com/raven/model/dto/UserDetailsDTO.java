@@ -6,6 +6,9 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * A detailed DTO version of User class, containing necessary info for user details page.
+ */
 @Data
 @Builder
 @NoArgsConstructor

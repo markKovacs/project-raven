@@ -13,6 +13,7 @@ import java.util.Date;
 @EqualsAndHashCode(of = "id")
 @ToString
 @Entity
+@Table(name = "posts")
 public class Post {
 
     @Id

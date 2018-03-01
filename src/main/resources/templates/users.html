@@ -21,7 +21,10 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-striped">
+            <p th:if="${#lists.isEmpty(users)}">
+                There are no users available for display.
+            </p>
+            <table class="table table-striped" th:unless="${#lists.isEmpty(users)}">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -36,7 +39,7 @@
                     <td th:text="${user.id}">123</td>
                     <td th:text="${user.email}">johndoe@gmail.com</td>
                     <td th:text="${user.name}">John Doe</td>
-                    <td th:text="${user.city}">New York</td>
+                    <td th:text="${user.city == null ? 'N/A' : user.city}">New York</td>
                     <td th:text="${#dates.format(user.registeredAt, 'dd-MM-yyyy HH:mm')}">28-11-2018 12:45</td>
                 </tr>
                 </tbody>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+
+<head>
+    <title>Registration Page</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <form th:object="${user}" name="login" th:action="@{/registration}" class="form-signin" method="post">
+
+        <h2 class="form-signin-heading">Registration Form</h2>
+
+        <th:block th:each="error : ${errors}">
+            <div th:text="${error}" class="alert alert-danger">Error message example.</div>
+        </th:block>
+
+        <label for="email" class="sr-only">Email</label>
+        <input th:field="*{email}" type="email" id="email" class="form-control" placeholder="Email" required="required" autofocus="autofocus"/>
+
+        <label for="password" class="sr-only">Password</label>
+        <input th:field="*{password}" type="password" id="password" class="form-control" placeholder="Password" required="required"/>
+
+        <label for="password-confirmation" class="sr-only">Password Confirmation</label>
+        <input th:field="*{passwordConfirmation}" type="password" id="password-confirmation" class="form-control" placeholder="Confirm password" required="required"/>
+
+        <label for="given-name" class="sr-only">Given Name</label>
+        <input th:field="*{givenName}" type="text" id="given-name" class="form-control" placeholder="Given Name" required="required"/>
+
+        <label for="middle-name" class="sr-only">Middle Name</label>
+        <input th:field="*{middleName}" type="text" id="middle-name" class="form-control" placeholder="Middle Name"/>
+
+        <label for="family-name" class="sr-only">Family Name</label>
+        <input th:field="*{familyName}" type="text" id="family-name" class="form-control" placeholder="Family Name" required="required"/>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="newsletter"/> Sign me up for newsletter.
+            </label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+
+    </form>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+
+<head>
+    <title>Error Page</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="jumbotron">
+        <h1>Oops, an error occurred</h1>
+        <p>Sorry but your request could not be fully processed. Please contact the server administrator.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a th:href="@{/}" class="btn btn-primary">Back to Index</a>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h2>Error Details</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>Error Type: <span th:text="${error}">Not Found</span></p>
+            <p>Message: <span th:text="${message}">Some error message.</span></p>
+            <p>Requested Path: <span th:text="${path}">/index</span></p>
+            <p>Error Status Code: <span th:text="${status}">404</span></p>
+            <p>Date: <span th:text="${#dates.format(timestamp, 'yyyy.MM.dd HH:mm')}">2018.12.30 15:47</span></p>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
