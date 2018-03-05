@@ -1,11 +1,10 @@
-package com.raven.utils;
+package com.raven.util;
 
 import com.raven.model.City;
 import com.raven.model.Post;
 import com.raven.model.Role;
 import com.raven.model.User;
 import com.raven.repository.RoleRepository;
-import com.raven.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 @Component

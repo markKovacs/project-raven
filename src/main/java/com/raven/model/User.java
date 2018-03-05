@@ -1,10 +1,6 @@
 package com.raven.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.hibernate.validator.constraints.Email;
+import lombok.*;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -12,8 +8,10 @@ import java.util.*;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "email")
 @ToString
+@Builder
 @Entity
 @Table(name = "users")
 public class User {
@@ -54,7 +52,7 @@ public class User {
     private List<Post> postList = new ArrayList<>();
 
     public User(String email, String givenName, String middleName, String familyName, City city, String pw) {
-        // Used for data initing, only for testing
+        // Used for data initialization, only for testing
         this.email = email;
         this.givenName = givenName;
         this.middleName = middleName;
@@ -66,11 +64,13 @@ public class User {
 
     public User(String email, String userHash,
                 String givenName, String middleName, String familyName) {
+        // Used as copy constructor, to transform UserRegistrationDTO objects
         this.email = email;
         this.userHash = userHash;
         this.givenName = givenName;
         this.middleName = middleName;
         this.familyName = familyName;
+        this.enabled = false;
     }
 
     public String getFullName() {

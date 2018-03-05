@@ -1,26 +1,23 @@
-package com.raven.model.dto;
+package com.raven.web.dto;
 
-import com.raven.model.Post;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 /**
- * A detailed DTO version of User class, containing necessary info for user details page.
+ * Lean DTO version of User class, containing necessary info only for listing.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class UserDetailsDTO {
+public class UserInfoDTO {
 
     private Long id;
     private String email;
     private String name;
     private String city;
     private Date registeredAt;
-    private List<Post> posts;
 
 }

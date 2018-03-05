@@ -11,31 +11,46 @@
 <body>
 <div layout:fragment="content">
 
-    <form th:object="${user}" name="login" th:action="@{/registration}" class="form-signin" method="post">
+    <form th:object="${userRegDto}" name="login" th:action="@{/registration}" class="form-signin" method="post">
 
-        <h2 class="form-signin-heading">Registration Form</h2>
 
-        <th:block th:each="error : ${errors}">
-            <div th:text="${error}" class="alert alert-danger">Error message example.</div>
-        </th:block>
+        <h2 class="form-signin-heading text-center">Registration</h2>
 
-        <label for="email" class="sr-only">Email</label>
-        <input th:field="*{email}" type="email" id="email" class="form-control" placeholder="Email" required="required" autofocus="autofocus"/>
+        <p th:each="error : ${#fields.globalErrors()}"
+           th:text="${error}">Global errors</p>
+
+        <label for="email" class="sr-only" th:text="#{label.user.email}">Email</label>
+        <input th:field="*{email}" type="text" id="email" class="form-control" th:placeholder="#{label.user.email}"
+               placeholder="Email" required="required" autofocus="autofocus"/>
+        <p th:each="error : ${#fields.errors('email')}"
+           th:text="${error}">Email validation errors</p>
 
         <label for="password" class="sr-only">Password</label>
-        <input th:field="*{password}" type="password" id="password" class="form-control" placeholder="Password" required="required"/>
+        <input th:field="*{password}" type="password" id="password" class="form-control" th:placeholder="#{label.user.password}"
+               placeholder="Password" required="required"/>
+        <p th:each="error : ${#fields.errors('password')}"
+           th:text="${error}">Password validation errors</p>
 
         <label for="password-confirmation" class="sr-only">Password Confirmation</label>
         <input th:field="*{passwordConfirmation}" type="password" id="password-confirmation" class="form-control" placeholder="Confirm password" required="required"/>
 
         <label for="given-name" class="sr-only">Given Name</label>
-        <input th:field="*{givenName}" type="text" id="given-name" class="form-control" placeholder="Given Name" required="required"/>
+        <input th:field="*{givenName}" type="text" id="given-name" class="form-control" th:placeholder="#{label.user.givenName}"
+               placeholder="Given Name" />
+        <p th:each="error : ${#fields.errors('givenName')}"
+           th:text="${error}">Given name validation errors</p>
 
         <label for="middle-name" class="sr-only">Middle Name</label>
-        <input th:field="*{middleName}" type="text" id="middle-name" class="form-control" placeholder="Middle Name"/>
+        <input th:field="*{middleName}" type="text" id="middle-name" class="form-control" th:placeholder="#{label.user.middleName}"
+               placeholder="Middle Name"/>
+        <p th:each="error : ${#fields.errors('middleName')}"
+           th:text="${error}">Middle name validation errors</p>
 
         <label for="family-name" class="sr-only">Family Name</label>
-        <input th:field="*{familyName}" type="text" id="family-name" class="form-control" placeholder="Family Name" required="required"/>
+        <input th:field="*{familyName}" type="text" id="family-name" class="form-control" th:placeholder="#{label.user.familyName}"
+               placeholder="Family Name" />
+        <p th:each="error : ${#fields.errors('familyName')}"
+           th:text="${error}">Family name validation errors</p>
 
         <div class="checkbox">
             <label>
@@ -48,6 +63,7 @@
     </form>
 
 </div>
+
 </body>
 
 </html>
