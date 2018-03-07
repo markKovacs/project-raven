@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" th:href="@{~/img/raven.png}"/>
+    <link rel="shortcut icon" type="image/png" th:href="@{~/img/favicon.png}"/>
 
     <title layout:title-pattern="$CONTENT_TITLE - ProjectRaven">ProjectRaven</title>
 
@@ -40,8 +40,10 @@
 
 <body>
 
+    <!-- NAVBAR -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
+
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
                         aria-expanded="false" aria-controls="navbar">
@@ -52,7 +54,10 @@
                 </button>
                 <a class="navbar-brand" th:href="@{/}">ProjectRaven</a>
             </div>
+
             <div id="navbar" class="navbar-collapse collapse">
+
+                <!-- LEFT SIDE -->
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/}">Home</a></li>
                     <li><a th:href="@{/users}">Users</a></li>
@@ -66,7 +71,41 @@
                         </ul>
                     </li>
                 </ul>
+
+                <!-- RIGHT SIDE -->
                 <ul class="nav navbar-nav navbar-right">
+
+                    <!-- LANGUAGE SELECT (ENG/HUN) -->
+                    <li class="dropdown">
+                        <a th:switch="__${#locale}__" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <th:block th:case="'en'">
+                                <img id="imgNavSel" th:src="@{~/img/eng.gif}" alt="..." class="img-thumbnail icon-small" />
+                                <span id="lanNavSel">ENG</span>
+                                <span class="caret"></span>
+                            </th:block>
+                            <th:block th:case="'hu'">
+                                <img id="imgNavSel" th:src="@{~/img/hun.gif}" alt="..." class="img-thumbnail icon-small" />
+                                <span id="lanNavSel">HUN</span>
+                                <span class="caret"></span>
+                            </th:block>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a data-lang="hu" id="navHun" href="#" class="language">
+                                    <img id="imgNavHun" th:src="@{~/img/hun.gif}" alt="..." class="img-thumbnail icon-small" />
+                                    <span id="lanNavHun" th:text="#{lang.hun}">Hungarian</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-lang="en" id="navEng" href="#" class="language">
+                                    <img id="imgNavEng" th:src="@{~/img/eng.gif}" alt="..." class="img-thumbnail icon-small" />
+                                    <span id="lanNavEng" th:text="#{lang.eng}">English</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- LOGIN / REGISTRATION / PROFILE / LOGOUT -->
                     <li sec:authorize="isAnonymous()">
                         <a th:href="@{/registration}">Registration</a>
                     </li>
@@ -80,18 +119,22 @@
                         <form id="frmlogout" th:action="@{/logout}" method="post" class="form-inline" hidden="hidden"></form>
                         <a href="javascript:{}" onclick="document.getElementById('frmlogout').submit(); return false;">Logout</a>
                     </li>
+
                 </ul>
+
             </div>
+
         </div>
     </nav>
 
     <div class="container theme-showcase" role="main">
 
-        <!-- Content through layout dialect -->
+        <!-- CONTENT - INJECTED WITH LAYOUT DIALECT -->
         <div layout:fragment="content"></div>
 
     </div>
 
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <p class="text-muted text-center footer-text">© 2018 ProjectRaven - Spring Boot base project.</p>

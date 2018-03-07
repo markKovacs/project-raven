@@ -12,6 +12,7 @@ public class InitializerBean {
 
     public InitializerBean(RoleRepository roleRepository) {
 
+        User user = new User("user@raven.com", "Mark", null, "Smith", City.BDP, "$2a$11$sCVwOuB1ypaBeZDJQDH2RexYlqXQ6EOb1N7bhJTWoRfNxtIYCXqvi");
         User johnDoe = new User("johndoe@raven.com", "John", null, "Doe", City.BDP, "pass");
         User maryJane = new User("maryjane@raven.com", "Mary", "Rose", "Jane", City.WRS, "pass");
         User billSmith = new User("billsmith@raven.com", "Bill", null, "Smith", City.KRK, "pass");
@@ -28,6 +29,7 @@ public class InitializerBean {
         johnDoe.addRoles(userRole, adminRole);
         maryJane.addRoles(userRole, adminRole);
         billSmith.addRoles(userRole);
+        user.addRoles(userRole, adminRole);
 
         // Everything persisted through cascades
         roleRepository.save(adminRole);

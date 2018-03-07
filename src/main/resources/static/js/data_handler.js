@@ -12,10 +12,10 @@ app.dataHandler = {
                 test_data: testData
             },
             success: function (response) {
-                app.logic.testFunction();
+                app.logic.someSuccessHandler();
             },
             error: function () {
-                app.logic.testFunction();
+                app.logic.someErrorHandler();
             }
         });
 

@@ -45,7 +45,7 @@ public class MailService {
     }
 
     public void sendEmail(String mailTo, String firstName, EmailType emailType) {
-        sendEmail(mailTo, null, null, emailType);
+        sendEmail(mailTo, firstName, null, emailType);
     }
 
     public void sendEmail(String mailTo, EmailType emailType) {

@@ -15,6 +15,7 @@ public class SecurityEventListener implements ApplicationListener<AbstractAuthen
         if (event instanceof AuthenticationSuccessEvent) {
             log.info("User with email '" + event.getAuthentication().getName() + "' has logged in.");
         }
+
     }
 
 }
