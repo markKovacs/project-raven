@@ -1,17 +1,24 @@
 package com.raven.service;
 
+import com.raven.model.Office;
 import com.raven.model.Role;
 import com.raven.model.User;
+import com.raven.repository.OfficeRepository;
 import com.raven.repository.RoleRepository;
 import com.raven.repository.UserRepository;
 import com.raven.web.dto.UserDetailsDTO;
 import com.raven.web.dto.UserInfoDTO;
+import com.raven.web.dto.UserProfileDTO;
 import com.raven.web.dto.UserRegistrationDTO;
 import com.raven.web.exception.EmailExistsException;
+import com.raven.web.exception.OfficeNotExistingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,28 +29,34 @@ import java.util.stream.Collectors;
 public class UserService {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private MailService mailService;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private OfficeRepository officeRepository;
+    @Autowired
+    private UserTransformService userTransformService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserInfoDTO> getAllUsers() {
 
         return userRepository.findAll()
                 .stream()
-                .map(this::transformToUserInfoDTO)
+                .map(user -> userTransformService.transformToUserInfoDTO(user))
                 .collect(Collectors.toList());
     }
 
-    public UserDetailsDTO getUser(String userId) {
+    public UserDetailsDTO getUserById(String userId) {
 
-        return transformToUserDetailsDTO(userRepository.findOne(Long.valueOf(userId)));
+        return userTransformService.transformToUserDetailsDTO(userRepository.findOne(Long.valueOf(userId)));
+    }
+
+    public UserProfileDTO getUserByEmail(String email) {
+
+        return userTransformService.transformToUserProfileDTO(userRepository.findByEmail(email));
     }
 
     public void register(UserRegistrationDTO userRegDto) throws EmailExistsException {
@@ -54,9 +67,9 @@ public class UserService {
             throw new EmailExistsException();
         }
 
-        User newUser = transformRegToUser(userRegDto);
+        User newUser = userTransformService.transformRegToUser(userRegDto, passwordEncoder);
 
-        String activation = generateActivation();
+        String activation = UUID.randomUUID().toString();
         newUser.setActivation(activation);
 
         Role userRole = roleRepository.findByRoleType(Role.RoleType.USER);
@@ -87,41 +100,27 @@ public class UserService {
         return true;
     }
 
-    private String generateActivation() {
-        return UUID.randomUUID().toString();
-    }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
+    public void update(UserProfileDTO userProfDto, String principalEmail) throws OfficeNotExistingException {
 
-    private UserInfoDTO transformToUserInfoDTO(User user) {
+        User user;
+        Office office = null;
 
-        return UserInfoDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getFullName())
-                .city(user.getCity() == null ? null : user.getCity().getCityName())
-                .registeredAt(user.getRegisteredAt())
-                .build();
-    }
+        if (!userProfDto.getOfficeName().isEmpty()) {
+            office = officeRepository.findByName(userProfDto.getOfficeName());
+            if (office == null) {
+                log.info("Update failed. Office '" + userProfDto.getOfficeName() + "' is invalid.");
+                throw new OfficeNotExistingException();
+            }
+        }
 
-    private UserDetailsDTO transformToUserDetailsDTO(User user) {
+        user = userTransformService.transformProfToUser(userProfDto);
+        user.setOffice(office);
 
-        return UserDetailsDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getFullName())
-                .city(user.getCity() == null ? null : user.getCity().getCityName())
-                .registeredAt(user.getRegisteredAt())
-                .posts(user.getPostList())
-                .build();
-    }
+        userRepository.updateProfile(principalEmail, user.getFamilyName(),
+                user.getMiddleName(), user.getGivenName(), user.getOffice());
 
-    private User transformRegToUser(UserRegistrationDTO userRegDto) {
-
-        return new User(userRegDto.getEmail(),
-                passwordEncoder.encode(userRegDto.getPassword()),
-                userRegDto.getGivenName(),
-                userRegDto.getMiddleName(),
-                userRegDto.getFamilyName()
-        );
+        log.info("User with email '" + principalEmail + "' updated successfully.");
     }
 
 }

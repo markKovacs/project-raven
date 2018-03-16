@@ -8,10 +8,8 @@ import java.util.*;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "email")
 @ToString
-@Builder
 @Entity
 @Table(name = "users")
 public class User {
@@ -37,8 +35,9 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @Enumerated(value = EnumType.STRING)
-    private City city;
+    @ManyToOne
+    @JoinColumn(name = "office_id", referencedColumnName = "id")
+    private Office office;
 
     private String givenName;
     private String middleName;
@@ -48,16 +47,15 @@ public class User {
     private Date registeredAt = new Date();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    @OrderBy("postedAt DESC NULLS LAST")
     private List<Post> postList = new ArrayList<>();
 
-    public User(String email, String givenName, String middleName, String familyName, City city, String pw) {
+    public User(String email, String givenName, String middleName, String familyName, Office office, String pw) {
         // Used for data initialization, only for testing
         this.email = email;
         this.givenName = givenName;
         this.middleName = middleName;
         this.familyName = familyName;
-        this.city = city;
+        this.office = office;
         this.userHash = pw;
         this.enabled = true;
     }
@@ -71,6 +69,13 @@ public class User {
         this.middleName = middleName;
         this.familyName = familyName;
         this.enabled = false;
+    }
+
+    public User(String givenName, String middleName, String familyName) {
+        // Used as a copy constructor, to transform UserProfileDTO objects
+        this.givenName = givenName;
+        this.middleName = middleName;
+        this.familyName = familyName;
     }
 
     public String getFullName() {

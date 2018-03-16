@@ -30,7 +30,7 @@
                     <th>#</th>
                     <th>Email</th>
                     <th>Name</th>
-                    <th>City</th>
+                    <th>Office</th>
                     <th>Registered</th>
                 </tr>
                 </thead>
@@ -39,7 +39,7 @@
                     <td th:text="${user.id}">123</td>
                     <td th:text="${user.email}">johndoe@gmail.com</td>
                     <td th:text="${user.name}">John Doe</td>
-                    <td th:text="${user.city == null ? 'N/A' : user.city}">New York</td>
+                    <td th:text="${user.office == null ? 'N/A' : user.office}">New York</td>
                     <td th:text="${#dates.format(user.registeredAt, 'dd-MM-yyyy HH:mm')}">28-11-2018 12:45</td>
                 </tr>
                 </tbody>

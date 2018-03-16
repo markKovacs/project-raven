@@ -35,12 +35,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return lci;
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        // Each request will be checked with this additional interceptor
-        registry.addInterceptor(localeChangeInterceptor());
-    }
-
     @Bean
     public MessageSource messageSource() {
         // Use the 'messages' resource bundle instead of default ValidationMessages
@@ -48,6 +42,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         messageSource.setBasename("classpath:/messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // Each request will be checked with this additional interceptor
+        registry.addInterceptor(localeChangeInterceptor());
     }
 
     @Override

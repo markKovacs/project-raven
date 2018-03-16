@@ -13,13 +13,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class UserDetailsDTO {
 
     private Long id;
     private String email;
     private String name;
-    private String city;
+    private String office;
     private Date registeredAt;
     private List<Post> posts;
 

@@ -1,42 +1,41 @@
 package com.raven.web.dto;
 
-import com.raven.web.validation.PasswordMatches;
-import com.raven.web.validation.ValidEmail;
-import com.raven.web.validation.ValidPassword;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@PasswordMatches(message = "{PasswordMatches.user.password}")
-public class UserRegistrationDTO {
+public class UserProfileDTO {
 
-    @NotNull
-    @ValidEmail(message = "{ValidEmail.user.email}")
+    // Immutable fields
+    private Long id;
     private String email;
+    private List<String> roles;
+    @DateTimeFormat // transforms String coming from form to Date
+    private Date registeredAt;
 
-    @NotNull
-    @ValidPassword(message = "{ValidPassword.user.password}")
-    private String password;
-
-    private String passwordConfirmation;
-
-    @NotNull
+    // Mutable fields
+    @NotNull(message = "{Size.user.givenName}")
     @Size(max = 60, message = "{Size.user.givenName}")
     private String givenName;
 
     @Size(max = 60, message = "{Size.user.middleName}")
     private String middleName;
 
-    @NotNull
+    @NotNull(message = "{Size.user.familyName}")
     @Size(max = 60, message = "{Size.user.familyName}")
     private String familyName;
+
+    private String officeName;
 
 }

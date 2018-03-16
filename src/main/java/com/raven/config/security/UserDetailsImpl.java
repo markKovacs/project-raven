@@ -55,4 +55,10 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return user.getEnabled();
     }
+
+    public String getGivenName() {
+        // Can be used in any views through #authentication.getPrincipal()
+        return user.getGivenName();
+    }
+
 }

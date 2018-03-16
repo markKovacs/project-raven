@@ -11,13 +11,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class UserInfoDTO {
 
     private Long id;
     private String email;
     private String name;
-    private String city;
+    private String office;
     private Date registeredAt;
 
 }

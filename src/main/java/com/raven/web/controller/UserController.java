@@ -1,10 +1,13 @@
 package com.raven.web.controller;
 
+import com.raven.service.OfficeService;
+import com.raven.service.UserService;
+import com.raven.web.dto.UserProfileDTO;
 import com.raven.web.dto.UserRegistrationDTO;
 import com.raven.web.exception.EmailExistsException;
 import com.raven.web.exception.InvalidActivationCodeException;
+import com.raven.web.exception.OfficeNotExistingException;
 import com.raven.web.validation.UserRegValidator;
-import com.raven.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,16 +17,30 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private OfficeService officeService;
 
     @InitBinder("userRegDto")
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(new UserRegValidator());
+    }
+
+    @ExceptionHandler(value = InvalidActivationCodeException.class)
+    public ModelAndView onInvalidActivationCodeException(Exception e) {
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorTitle", "Invalid Activation Code");
+        mav.addObject("errorMessage", e.getMessage() + ". Please contact the server admin.");
+        mav.setViewName("errors/simple_error");
+
+        return mav;
     }
 
     @RequestMapping(value = "/")
@@ -39,7 +56,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/{id}")
     public String getUserDetailsPage(Model model, @PathVariable(value = "id") String userId) {
-        model.addAttribute("user", userService.getUser(userId));
+        model.addAttribute("user", userService.getUserById(userId));
         return "user_details";
     }
 
@@ -77,15 +94,31 @@ public class UserController {
         return "redirect:/login?activated";
     }
 
-    @ExceptionHandler(value = InvalidActivationCodeException.class)
-    public ModelAndView onInvalidActivationCodeException(Exception e) {
+    @RequestMapping(value = "/profile")
+    public String getProfilePage(Model model, Principal principal) {
 
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("errorTitle", "Invalid Activation Code");
-        mav.addObject("errorMessage", e.getMessage() + ". Please contact the server admin.");
-        mav.setViewName("errors/simple_error");
+        model.addAttribute("userProfDto", userService.getUserByEmail(principal.getName()));
+        model.addAttribute("offices", officeService.getOffices());
 
-        return mav;
+        return "profile";
+    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    public String handleProfileUpdate(@ModelAttribute("userProfDto") @Valid UserProfileDTO userProfDto,
+                                      BindingResult result, Principal principal, Model model) {
+
+        if (!result.hasErrors()) {
+            try {
+                userService.update(userProfDto, principal.getName());
+                return "redirect:/?updated";
+            } catch (OfficeNotExistingException e) {
+                result.rejectValue("officeName", "message.officeNotExisting");
+            }
+        }
+
+        model.addAttribute("offices", officeService.getOffices());
+
+        return "profile";
     }
 
 }

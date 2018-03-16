@@ -12,6 +12,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * Default error page handler. Used if exceptions not being handled locally in controller.
+ */
 @Controller
 public class ErrorPageController implements ErrorController {
 

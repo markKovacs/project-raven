@@ -10,8 +10,8 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 @ToString
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "posts")
 public class Post {

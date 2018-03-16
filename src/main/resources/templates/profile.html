@@ -5,36 +5,34 @@
       layout:decorator="layout">
 
 <head>
-    <title>Registration Page</title>
+    <title>Profile</title>
 </head>
 
 <body>
 <div layout:fragment="content">
 
-    <form th:object="${userRegDto}" name="registration" th:action="@{/registration}" class="form-signin" method="post">
+    <form th:object="${userProfDto}" name="profile" th:action="@{/profile}" class="form-signin" method="post">
 
-        <h2 class="form-signin-heading text-center">Registration</h2>
+
+        <h2 class="form-signin-heading text-center">Profile</h2>
 
         <!-- GLOBAL ERRORS -->
         <p th:each="error : ${#fields.globalErrors()}"
            th:text="${error}" class="alert alert-danger text-center">Global errors</p>
 
-        <!-- INPUT / LABEL / FIELD ERRORS-->
-        <label for="email" class="sr-only" th:text="#{label.user.email}">Email</label>
-        <input th:field="*{email}" type="email" id="email" class="form-control" th:placeholder="#{label.user.email}"
-               placeholder="Email" required="required" autofocus="autofocus"/>
-        <p th:each="error : ${#fields.errors('email')}"
-           th:text="${error}" class="alert alert-danger text-center">Email validation errors</p>
+        <!-- STATIC FIELDS (id, email, registeredAt, roles)-->
+        <p>ID: #<span class="text-center" th:text="*{id}">123</span></p>
+        <p>Email: <span class="text-center" th:text="*{email}">123</span></p>
+        <p>Registered: <span class="text-center" th:text="*{#dates.format(registeredAt, 'dd-MM-yyyy HH:mm')}">28-11-2018 12:45</span></p>
+        <p>Roles: <span class="text-center" th:text="*{#strings.listJoin(roles, ', ')}">USER, ADMIN</span></p>
 
-        <label for="password" class="sr-only">Password</label>
-        <input th:field="*{password}" type="password" id="password" class="form-control" th:placeholder="#{label.user.password}"
-               placeholder="Password" required="required"/>
-        <p th:each="error : ${#fields.errors('password')}"
-           th:text="${error}" class="alert alert-danger text-center">Password validation errors</p>
+        <!-- HIDDEN FIELDS TO RETURN ALL INFO TO MODEL -->
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{email}" />
+        <input type="hidden" th:field="*{registeredAt}" />
+        <input type="hidden" th:field="*{roles}" />
 
-        <label for="password-confirmation" class="sr-only">Password Confirmation</label>
-        <input th:field="*{passwordConfirmation}" type="password" id="password-confirmation" class="form-control" placeholder="Confirm password" required="required"/>
-
+        <!-- INPUT / LABEL / FIELD ERRORS (givenName, middleName, familyName, office(id/name)-->
         <label for="given-name" class="sr-only">Given Name</label>
         <input th:field="*{givenName}" type="text" id="given-name" class="form-control" th:placeholder="#{label.user.givenName}"
                placeholder="Given Name" required="required" />
@@ -53,11 +51,17 @@
         <p th:each="error : ${#fields.errors('familyName')}"
            th:text="${error}" class="alert alert-danger text-center">Family name validation errors</p>
 
-        <!--<div class="checkbox">
-            <label>
-                <input type="checkbox" value="newsletter"/> Sign me up for newsletter.
-            </label>
-        </div>-->
+        <label for="office" class="sr-only">Office</label>
+        <select th:field="*{officeName}" id="office" class="form-control">
+            <option selected="selected" value=""> -- select an option -- </option>
+            <option th:each="office : ${offices}"
+                    th:selected="${userProfDto.officeName eq office.name}"
+                    th:value="${office.name}"
+                    th:text="${office.name}">New York
+            </option>
+        </select>
+        <p th:each="error : ${#fields.errors('officeName')}"
+           th:text="${error}" class="alert alert-danger text-center">Office name validation errors</p>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 

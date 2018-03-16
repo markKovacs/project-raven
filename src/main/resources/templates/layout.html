@@ -113,7 +113,7 @@
                         <a th:href="@{/login}">Login</a>
                     </li>
                     <li sec:authorize="isAuthenticated()">
-                        <a sec:authentication="name" th:href="@{/profile}">Anonymous</a>
+                        <a th:text="${#authentication.getPrincipal().getGivenName()}" th:href="@{/profile}">Anonymous</a>
                     </li>
                     <li sec:authorize="isAuthenticated()">
                         <form id="frmlogout" th:action="@{/logout}" method="post" class="form-inline" hidden="hidden"></form>
