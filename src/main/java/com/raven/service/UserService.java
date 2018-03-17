@@ -13,13 +13,16 @@ import com.raven.web.dto.UserRegistrationDTO;
 import com.raven.web.exception.EmailExistsException;
 import com.raven.web.exception.OfficeNotExistingException;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -59,7 +62,9 @@ public class UserService {
         return userTransformService.transformToUserProfileDTO(userRepository.findByEmail(email));
     }
 
+    @Transactional(rollbackFor = EmailExistsException.class)
     public void register(UserRegistrationDTO userRegDto) throws EmailExistsException {
+
         User userWithEmail = userRepository.findByEmail(userRegDto.getEmail());
 
         if (userWithEmail != null) {
@@ -75,13 +80,21 @@ public class UserService {
         Role userRole = roleRepository.findByRoleType(Role.RoleType.USER);
         newUser.addRole(userRole);
 
-        userRepository.save(newUser);
+        try {
+            userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e) {
+            log.info("Registration failed. Email already registered: '" + userRegDto.getEmail() + "'.");
+            throw new EmailExistsException();
+        }
+
         log.info("User with email '" + userRegDto.getEmail() + "' has registered.");
 
         mailService.sendEmail(userRegDto.getEmail(), userRegDto.getGivenName(), activation, MailService.EmailType.ACTIVATION);
     }
 
+    @Transactional
     public boolean activate(String givenActivation) {
+
         User user = userRepository.findOneByActivation(givenActivation);
 
         if (user == null) {
@@ -100,7 +113,7 @@ public class UserService {
         return true;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void update(UserProfileDTO userProfDto, String principalEmail) throws OfficeNotExistingException {
 
         User user;

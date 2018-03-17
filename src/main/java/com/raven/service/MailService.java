@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -20,7 +23,9 @@ public class MailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void sendEmail(String mailTo, String firstName, String activation, EmailType emailType) {
+
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(MAIL_FROM);

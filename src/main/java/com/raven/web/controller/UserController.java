@@ -9,6 +9,7 @@ import com.raven.web.exception.InvalidActivationCodeException;
 import com.raven.web.exception.OfficeNotExistingException;
 import com.raven.web.validation.UserRegValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,7 @@ public class UserController {
     }
 
     @ExceptionHandler(value = InvalidActivationCodeException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ModelAndView onInvalidActivationCodeException(Exception e) {
 
         ModelAndView mav = new ModelAndView();

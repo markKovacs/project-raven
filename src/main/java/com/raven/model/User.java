@@ -66,7 +66,7 @@ public class User {
         this.email = email;
         this.userHash = userHash;
         this.givenName = givenName;
-        this.middleName = middleName;
+        this.middleName = middleName.isEmpty() ? null : middleName;
         this.familyName = familyName;
         this.enabled = false;
     }
