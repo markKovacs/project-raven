@@ -96,3 +96,8 @@ button {
     margin:0;
     padding:0;
 }
+
+/* WEBSOCKET COMMUNICATION */
+.conversation {
+    display: none;
+}

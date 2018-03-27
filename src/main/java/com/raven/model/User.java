@@ -49,6 +49,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Post> postList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
+    private List<UserMessage> messages = new ArrayList<>();
+
     public User(String email, String givenName, String middleName, String familyName, Office office, String pw) {
         // Used for data initialization, only for testing
         this.email = email;

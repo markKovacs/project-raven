@@ -2,13 +2,16 @@ package com.raven.web.controller;
 
 import com.raven.service.OfficeService;
 import com.raven.service.UserService;
+import com.raven.web.dto.UserInfoDTO;
 import com.raven.web.dto.UserProfileDTO;
 import com.raven.web.dto.UserRegistrationDTO;
+import com.raven.web.event.RegistrationEvent;
 import com.raven.web.exception.EmailExistsException;
 import com.raven.web.exception.InvalidActivationCodeException;
 import com.raven.web.exception.OfficeNotExistingException;
 import com.raven.web.validation.UserRegValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +30,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private OfficeService officeService;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @InitBinder("userRegDto")
     protected void initBinder(WebDataBinder binder) {
@@ -74,7 +79,8 @@ public class UserController {
 
         if (!result.hasErrors()) {
             try {
-                userService.register(userRegDto);
+                UserInfoDTO registeredUser = userService.register(userRegDto);
+                applicationEventPublisher.publishEvent(new RegistrationEvent(this, registeredUser));
                 return "redirect:/login?registered";
             } catch (EmailExistsException e) {
                 result.rejectValue("email", "message.regError");

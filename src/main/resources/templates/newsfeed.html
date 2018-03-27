@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>News Feed</title>
+
+    <script th:src="@{~/js/sockjs/sockjs.min.js}" type="application/javascript" defer="defer"></script>
+    <script th:src="@{~/js/sockjs/stomp.min.js}" type="application/javascript" defer="defer"></script>
+    <script th:src="@{~/js/sockjs/app.js}" type="application/javascript" defer="defer"></script>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+        enabled. Please enable
+        Javascript and reload this page!</h2></noscript>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 conversation">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="content">Message to be sent:</label>
+                    <input type="text" id="content" class="form-control" placeholder="Your message..." />
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h2>New Messages</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="offline">
+                Connection offline.
+            </p>
+            <table class="table table-striped conversation">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Content</th>
+                        <th>Posted</th>
+                    </tr>
+                </thead>
+                <tbody id="newmessages">
+                    <tr th:each="userMessage : ${userMessages}">
+                        <td th:text="${userMessage.userName}"></td>
+                        <td th:text="${userMessage.content}"></td>
+                        <td th:text="${userMessage.dateTimeString}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h2>New Users</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <p class="offline">
+                Connection offline.
+            </p>
+            <table class="table table-striped conversation">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Office</th>
+                    <th>Registered</th>
+                </tr>
+                </thead>
+                <tbody id="newusers">
+                    <tr th:each="user : ${users}" class="user-row-clickable" th:attr="data-href=${'user/' + user.id}">
+                        <td th:text="${user.id}">123</td>
+                        <td th:text="${user.email}">johndoe@gmail.com</td>
+                        <td th:text="${user.name}">John Doe</td>
+                        <td th:text="${user.office == null ? 'N/A' : user.office}">New York</td>
+                        <td th:text="${#dates.format(user.registeredAt, 'yyyy-MM-dd HH:mm:ss')}">28-11-2018 12:45</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+</html>

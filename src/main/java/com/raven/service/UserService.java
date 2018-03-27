@@ -60,7 +60,7 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = EmailExistsException.class)
-    public void register(UserRegistrationDTO userRegDto) throws EmailExistsException {
+    public UserInfoDTO register(UserRegistrationDTO userRegDto) throws EmailExistsException {
 
         User userWithEmail = userRepository.findByEmail(userRegDto.getEmail());
 
@@ -87,6 +87,8 @@ public class UserService {
         log.info("User with email '" + userRegDto.getEmail() + "' has registered.");
 
         mailService.sendEmail(userRegDto.getEmail(), userRegDto.getGivenName(), activation, MailService.EmailType.ACTIVATION);
+
+        return userTransformService.transformToUserInfoDTO(newUser);
     }
 
     @Transactional
