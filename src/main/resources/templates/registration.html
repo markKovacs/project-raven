@@ -13,7 +13,7 @@
 
     <form th:object="${userRegDto}" name="registration" th:action="@{/registration}" class="form-signin" method="post">
 
-        <h2 class="form-signin-heading text-center">Registration</h2>
+        <h2 th:text="#{label.form.title}" class="form-signin-heading text-center">Registration</h2>
 
         <!-- GLOBAL ERRORS -->
         <p th:each="error : ${#fields.globalErrors()}"
@@ -33,7 +33,7 @@
            th:text="${error}" class="alert alert-danger text-center">Password validation errors</p>
 
         <label for="password-confirmation" class="sr-only">Password Confirmation</label>
-        <input th:field="*{passwordConfirmation}" type="password" id="password-confirmation" class="form-control" placeholder="Confirm password" required="required"/>
+        <input th:field="*{passwordConfirmation}" type="password" id="password-confirmation" class="form-control" th:placeholder="#{label.user.confirmPass}" placeholder="Confirm password" required="required"/>
 
         <label for="given-name" class="sr-only">Given Name</label>
         <input th:field="*{givenName}" type="text" id="given-name" class="form-control" th:placeholder="#{label.user.givenName}"
@@ -59,7 +59,7 @@
             </label>
         </div>-->
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{label.form.submit}">Submit</button>
 
     </form>
 
